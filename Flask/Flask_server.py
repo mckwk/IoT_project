@@ -2,12 +2,11 @@ from flask import Flask, request, jsonify
 import psycopg2
 from flask_bcrypt import Bcrypt
 import re
-
+from config import DATABASE_URL
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
-DATABASE_URL = "url"
 
 def is_valid_email(email):
     return re.match(r"[^@]+@[^@]+\.[^@]+", email)
@@ -94,17 +93,37 @@ def login():
         cursor.execute("SELECT password FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
 
-        if user and bcrypt.check_password_hash(user[0], password):  # Vérification du mot de passe
+        if user and bcrypt.check_password_hash(user[0], password):
             return jsonify({"message": "Connexion success !"}), 200
         else:
             return jsonify({"error": "Email or password incorrect"}), 401
     except Exception as e:
         print("Database error:", e)
         return jsonify({"error": "Database error"}), 500
-    
 
 
+@app.route('/data', methods=['GET'])
+def download_data():
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cursor = conn.cursor()
+        cursor.execute("SELECT temperature, humidity, timestamp FROM data ORDER BY timestamp DESC")
+        rows = cursor.fetchall()
+        cursor.close()
+        conn.close()
 
+        data = []
+        for row in rows:
+            data.append({
+                "temperature": row[0],
+                "humidity": row[1],
+                "timestamp": row[2].isoformat()
+            })
+
+        return jsonify(data), 200
+    except Exception as e:
+        print("Database error:", e)
+        return jsonify({"error": "Database error"}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
