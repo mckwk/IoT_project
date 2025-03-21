@@ -1,11 +1,16 @@
 from flask import Flask, request, jsonify
 import psycopg2
 from flask_bcrypt import Bcrypt
+import re
+
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
 DATABASE_URL = "url"
+
+def is_valid_email(email):
+    return re.match(r"[^@]+@[^@]+\.[^@]+", email)
 
 def insert_data(temp, humid):
     try:
@@ -96,6 +101,10 @@ def login():
     except Exception as e:
         print("Database error:", e)
         return jsonify({"error": "Database error"}), 500
+    
+
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
