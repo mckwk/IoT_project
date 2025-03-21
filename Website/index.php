@@ -3,19 +3,34 @@ include 'db.php';
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->execute(['email' => $email]);
-    $user = $stmt->fetch();
-
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
-        header("Location: dashboard.php");
-        exit();
+    if (!$email) {
+        $error = "Invalid email format.";
     } else {
-        $error = "Invalid login credentials.";
+        if (!isset($_SESSION['login_attempts'])) {
+            $_SESSION['login_attempts'] = 0;
+        }
+
+        if ($_SESSION['login_attempts'] >= 5) {
+            $error = "Too many failed login attempts. Please try again later.";
+        } else {
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->execute(['email' => $email]);
+            $user = $stmt->fetch();
+
+            if ($user && password_verify($password, $user['password'])) {
+                session_regenerate_id(true); 
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['login_attempts'] = 0; 
+                header("Location: dashboard.php");
+                exit();
+            } else {
+                $_SESSION['login_attempts']++;
+                $error = "Invalid login credentials.";
+            }
+        }
     }
 }
 ?>
@@ -34,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="card">
                 <div class="card-header text-center">Login</div>
                 <div class="card-body">
-                    <?php if (isset($error)) echo "<div class='alert alert-danger'>$error</div>"; ?>
+                    <?php if (isset($error)) echo "<div class='alert alert-danger'>" . htmlspecialchars($error) . "</div>"; ?>
                     <form method="POST">
                         <div class="mb-3">
                             <label class="form-label">Email</label>
