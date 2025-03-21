@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
 import psycopg2
 from flask_bcrypt import Bcrypt
+from config import DATABASE_URL
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
-DATABASE_URL = "url"
 
 def insert_data(temp, humid):
     try:
