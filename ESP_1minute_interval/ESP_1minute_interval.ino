@@ -12,7 +12,7 @@ DHT dht(DHTPIN, DHTTYPE);
 const char* ssid = "ssid";  // Replace with your WiFi SSID
 const char* password = "pwd";         // Replace with your WiFi password
 const char* serverUrl = "http://rpi_ip:port/store";  // Raspberry Pi server
-const char* fingerprint = "SHA-256 FINGERPRINT HERE"; // Server’s certificate fingerprint
+const char* serverCert = ""; // Server SSL certificate 
 
 WiFiClientSecure client;
 
@@ -24,7 +24,7 @@ void connectWiFi() {
         delay(500);
         Serial.print(".");
     }
-    if (WiFi.status() ==WL_CONNECTED) {
+    if (WiFi.status() == WL_CONNECTED) {
         Serial.println("Connected to WiFi!");
         Serial.print("IP Address: ");
         Serial.println(WiFi.localIP());
@@ -64,6 +64,8 @@ void setup() {
     Serial.println("Initializing WiFi");
     connectWiFi();
     dht.begin();
+
+    client.setCACert(serverCert); //Charger le certificat du serveur
 }
 
 void loop() {
@@ -81,9 +83,7 @@ void loop() {
 
     // Send data to server
     if (WiFi.status() == WL_CONNECTED) {
-        WiFiClientSecure client;
-        client.setFingerprint(fingerprint);
-        
+                
         HTTPClient https;
         if (https.begin(client, serverUrl)) {
             https.addHeader("Content-Type", "application/json");
@@ -93,7 +93,7 @@ void loop() {
             
             Serial.print("📡 HTTPS Response code: ");
             Serial.println(httpsResponseCode);
-            https.end;
+            https.end();
         } else {
             Serial.println("Server connection failed!");
         }
