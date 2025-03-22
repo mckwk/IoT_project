@@ -61,7 +61,12 @@ This project consists of an IoT system that collects temperature and humidity da
 
 ### Deployment
 
-Run the `deploy.sh` script to automate the deployment process:
+Run the `deploy.sh` in Deployment folder script to automate the deployment process for current contents of the repo:
 ```sh
 ./deploy.sh
+```
+
+Run the `deploy.sh` in Deployment folder script to automate the deployment process for the latest release:
+```sh
+./deploy_release.sh
 ```
