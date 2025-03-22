@@ -1,16 +1,12 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <DHT.h>
+#include "config.h"
 
 // DHT Sensor Setup
 #define DHTPIN 5
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
-
-// WiFi Configuration
-const char* ssid = "ssid";  // Replace with your WiFi SSID
-const char* password = "pwd";         // Replace with your WiFi password
-const char* serverUrl = "http://ip:port/store";  // Raspberry Pi server
 
 void setup() {
     Serial.begin(115200);
