@@ -4,69 +4,80 @@ This project consists of an IoT system that collects temperature and humidity da
 
 ## Project Structure
 
-- `ESP_1minute_interval`: Contains the code for the ESP8266 microcontroller to read sensor data every minute and send it to the server.
+- `ESP_interval`: Contains the code for the ESP8266 microcontroller to read sensor data at a configurable interval and send it to the server.
 - `ESP_single_measurement`: Contains the code for the ESP32 microcontroller to read sensor data once and send it to the server.
 - `Website`: Contains the PHP files for the web dashboard and user authentication.
 - `Flask`: Contains the Flask server code to handle data storage and user management.
 - `DB`: Contains database user configuration.
-- `deploy.sh`: Script to deploy the project on a Raspberry Pi.
+- `Deployment`: Contains scripts to automate the deployment process for the project.
 
-## Setup Instructions
 
-### Prerequisites
+## Deployment Instructions on RPI
 
-- Raspberry Pi with Raspbian OS
-- PostgreSQL database
-- Python 3 and Flask
-- PHP and a web server (e.g., Apache)
-- Git
+The `Deployment` folder contains scripts to automate the deployment process for the project. Below are the instructions for using these scripts:
 
-### Flask Server Setup
 
-1. Clone the repository:
+### Scripts for pulling data from the repository to the RPI
+
+#### Deploying from the Repository
+
+To deploy the project from the latest repository contents:
+1. Run the script:
     ```sh
-    git clone https://github.com/mckwk/IoT_project.git /tmp/iotproject
+    ./Deployment/deploy_from_repository.sh
     ```
 
-2. Navigate to the Flask directory:
+#### Deploying from the Latest Release
+Use that one if you broke everything and you want to return to a baseline functional version.
+
+To deploy the project from the latest GitHub release:
+1. Run the script:
     ```sh
-    cd /tmp/iotproject/Flask
+    ./Deployment/deploy_from_latest_release.sh
     ```
 
-3. Install the required Python packages:
+### Scripts for deploying the project and running it directly from RPI
+
+### Master Deployment Script
+
+The `master_deploy.sh` script orchestrates the deployment of the Flask server, website, and ESP code.
+
+1. Run the script:
     ```sh
-    pip install -r requirements.txt
+    ./Deployment/master_deploy.sh
     ```
 
-4. Set the `DATABASE_URL` environment variable in `config.py` with your PostgreSQL connection string.
+2. Follow the on-screen prompts to:
+   - Start the Flask server.
+   - Deploy the website.
+   - Choose and deploy the ESP code (either single measurement or interval measurement).
 
-5. Run the Flask server:
+### Deploying ESP Interval Code
+
+To deploy the ESP interval measurement code with a custom interval:
+1. Run the script:
     ```sh
-    python Flask_server.py
+    ./Deployment/deploy_esp_interval.sh <interval_in_minutes>
+    ```
+2. Replace `<interval_in_minutes>` with the desired interval in minutes.
+
+### Deploying ESP Single Measurement Code
+
+To deploy the ESP single measurement code:
+1. Run the script:
+    ```sh
+    ./Deployment/deploy_esp_single_mes.sh
     ```
 
-### Website Setup
+### Deploying the Website
 
-1. Copy the contents of the `Website` directory to your web server's root directory, excluding `db.php`:
+To deploy the website files:
+1. Run the script:
     ```sh
-    sudo rsync -av --exclude='db.php' /tmp/iotproject/Website/ /var/www/html
+    ./Deployment/deploy_web_page.sh
     ```
 
-2. Update the database connection details in `db.php`.
+## Notes
 
-### ESP8266/ESP32 Setup
-
-1. Update the WiFi credentials and server URL in the `config.h` files in `ESP_1minute_interval` and/or `ESP_single_measurement`.
-2. Upload the code to your ESP8266 microcontroller using the Arduino IDE or PlatformIO in VSC.
-
-### Deployment
-
-Run the `deploy.sh` in Deployment folder script to automate the deployment process for current contents of the repo:
-```sh
-./deploy.sh
-```
-
-Run the `deploy.sh` in Deployment folder script to automate the deployment process for the latest release:
-```sh
-./deploy_release.sh
-```
+- Logs for the Flask server and ESP deployment are stored in the `Logs` directory.
+- The website can be accessed at `http://<your-raspberry-pi-ip>` (or localhost) after deployment.

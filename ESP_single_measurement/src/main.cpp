@@ -8,6 +8,8 @@
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
+void goToDeepSleep();
+
 void setup() {
     Serial.begin(115200);
     WiFi.begin(ssid, password);
@@ -25,15 +27,15 @@ void setup() {
     Serial.println(WiFi.localIP());
 
     dht.begin();
-}
+    delay(2000);  // Give sensor time to start
 
-void loop() {
     // Read temperature and humidity
     float temperature = dht.readTemperature();
     float humidity = dht.readHumidity();
 
     if (isnan(temperature) || isnan(humidity)) {
         Serial.println("❌ Sensor reading error!");
+        goToDeepSleep();
         return;
     }
 
@@ -47,7 +49,8 @@ void loop() {
         http.begin(client, serverUrl);
         http.addHeader("Content-Type", "application/json");
 
-        String jsonPayload = "{\"temperature\": " + String(temperature) + ", \"humidity\": " + String(humidity) + "}";
+        String jsonPayload = "{\"temperature\": " + String(temperature) + 
+                             ", \"humidity\": " + String(humidity) + "}";
 
         int httpResponseCode = http.POST(jsonPayload);
         Serial.print("📡 HTTP Response code: ");
@@ -58,6 +61,15 @@ void loop() {
         Serial.println("🚨 WiFi disconnected!");
     }
 
-    // Wait for 1 minute before next reading
-    delay(60000);
+    // Go to deep sleep to save power
+    goToDeepSleep();
+}
+
+void goToDeepSleep() {
+    Serial.println("💤 Going to deep sleep...");
+    ESP.deepSleep(0);  // Sleep indefinitely until reset
+}
+
+void loop() {
+    // Empty loop - never runs due to deep sleep
 }
