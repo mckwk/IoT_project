@@ -1,4 +1,4 @@
-Logs
+logs
 
 # Ignore the config file
 flask/config.py

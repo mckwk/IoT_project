@@ -147,5 +147,5 @@ To deploy the website files:
 
 ## Notes
 
-- Logs for the flask server and ESP deployment are stored in the `Logs` directory.
+- logs for the flask server and ESP deployment are stored in the `logs` directory.
 - The website can be accessed at `http://<your-raspberry-pi-ip>` (or localhost) after deployment.

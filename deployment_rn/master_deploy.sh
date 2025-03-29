@@ -14,8 +14,8 @@ print_banner() {
 run_flask_server() {
     print_banner "🚀 Starting Flask Server"
     cd "$FLASK_SRC" || { echo "❌ Failed to navigate to Flask directory"; exit 1; }
-    mkdir -p "$PROJECT_ROOT/Logs"
-    nohup python3 Flask_server.py > "$PROJECT_ROOT/Logs/flask_server_debug.log" 2>&1 &
+    mkdir -p "$PROJECT_ROOT/logs"
+    nohup python3 Flask_server.py > "$PROJECT_ROOT/logs/flask_server_debug.log" 2>&1 &
     sleep 2  # Allow the process to start
     FLASK_PID=$(ps aux | grep "[p]ython3 Flask_server.py" | awk '{print $2}')
     if [ -z "$FLASK_PID" ]; then
@@ -23,7 +23,7 @@ run_flask_server() {
         exit 1
     fi
     echo "✅ Flask server running in the background with PID $FLASK_PID"
-    echo "Logs are available at $PROJECT_ROOT/Logs/flask_server_debug.log"
+    echo "logs are available at $PROJECT_ROOT/logs/flask_server_debug.log"
     echo "----------------------------------------"
 }
 
@@ -49,7 +49,7 @@ deploy_esp_code() {
 
     if [ "$esp_choice" == "1" ]; then
         echo "🔧 Deploying Single Measurement code..."
-        nohup ./deploy_esp_single_mes.sh > "$PROJECT_ROOT/Logs/esp_single_debug.log" 2>&1 &
+        nohup ./deploy_esp_single_mes.sh > "$PROJECT_ROOT/logs/esp_single_debug.log" 2>&1 &
         sleep 2  # Allow the process to start
         ESP_PID=$(ps aux | grep "[d]eploy_esp_single_mes.sh" | awk '{print $2}')
     elif [ "$esp_choice" == "2" ]; then
@@ -59,7 +59,7 @@ deploy_esp_code() {
             exit 1
         fi
         echo "🔧 Deploying Interval Measurement code with interval: $interval minute(s)..."
-        nohup ./deploy_esp_interval.sh "$interval" > "$PROJECT_ROOT/Logs/esp_interval_debug.log" 2>&1 &
+        nohup ./deploy_esp_interval.sh "$interval" > "$PROJECT_ROOT/logs/esp_interval_debug.log" 2>&1 &
         sleep 2  # Allow the process to start
         ESP_PID=$(ps aux | grep "[d]eploy_esp_interval.sh" | awk '{print $2}')
     else
@@ -73,7 +73,7 @@ deploy_esp_code() {
     fi
 
     echo "✅ ESP code deployment running in the background with PID $ESP_PID"
-    echo "Logs are available at $PROJECT_ROOT/Logs/esp_single_debug.log or esp_interval_debug.log"
+    echo "logs are available at $PROJECT_ROOT/logs/esp_single_debug.log or esp_interval_debug.log"
     echo "----------------------------------------"
 }
 
