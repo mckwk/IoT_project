@@ -2,7 +2,7 @@
 
 # Define common paths
 PROJECT_ROOT="/path/to/project"
-FLASK_SRC="$PROJECT_ROOT/Flask"
+FLASK_SRC="$PROJECT_ROOT/flask"
 WEBSITE_SRC="$PROJECT_ROOT/website"
 ESP_SINGLE_SRC="$PROJECT_ROOT/ESP_single_measurement"
 ESP_INTERVAL_SRC="$PROJECT_ROOT/ESP_interval"
