@@ -6,6 +6,7 @@ This project consists of an IoT system that collects temperature and humidity da
 
 - `ESP_interval`: Contains the code for the ESP8266 microcontroller to read sensor data at a configurable interval and send it to the server.
 - `ESP_single_measurement`: Contains the code for the ESP32 microcontroller to read sensor data once and send it to the server.
+- `ESP_blank_firmware`: Contains a blank firmware to stop the ESP device from sending data.
 - `website`: Contains the PHP files for the web dashboard and user authentication.
 - `flask`: Contains the flask server code to handle data storage and user management.
 - `DB`: Contains database user configuration.
@@ -79,7 +80,7 @@ To avoid confusion when cloning the repository, sensitive configuration files ha
     cp deployment_config.template.sh deployment_config.sh
     ```
 
-3. Open `deployment_config.sh` and update the paths (`PROJECT_ROOT`, `FLASK_DEST`, `WEBSITE_DEST`, etc.) to match your deployment environment.
+3. Open `deployment_config.sh` and update the paths (`PROJECT_ROOT`, `WEBSITE_DEST`, etc.) to match your deployment environment.
 
 ## deployment Instructions on RPI
 
@@ -144,6 +145,28 @@ To deploy the website files:
     ```sh
     ./deployment/deploy_web_page.sh
     ```
+
+### Stopping the ESP Device with Blank Firmware
+
+If you need to stop the ESP device from sending data, you can upload a blank firmware to the device. This will effectively stop its functionality.
+
+1. Navigate to the `ESP_blank_firmware` directory:
+    ```sh
+    cd ESP_blank_firmware
+    ```
+
+2. Upload the blank firmware to the ESP device:
+    ```sh
+    pio run --target upload
+    ```
+
+Alternatively, you can use the provided script to automate this process:
+1. Run the script:
+    ```sh
+    ./deployment/stop_esp_code.sh
+    ```
+
+This will upload the blank firmware to the ESP device and stop it from sending data.
 
 ## Notes
 

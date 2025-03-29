@@ -15,7 +15,7 @@ run_flask_server() {
     print_banner "🚀 Starting Flask Server"
     cd "$FLASK_SRC" || { echo "❌ Failed to navigate to Flask directory"; exit 1; }
     mkdir -p "$PROJECT_ROOT/logs"
-    nohup python3 Flask_server.py > "$PROJECT_ROOT/logs/flask_server_debug.log" 2>&1 &
+    nohup python3 flask_server.py > "$PROJECT_ROOT/logs/flask_server_debug.log" 2>&1 &
     sleep 2  # Allow the process to start
     FLASK_PID=$(ps aux | grep "[p]ython3 flask_server.py" | awk '{print $2}')
     if [ -z "$FLASK_PID" ]; then

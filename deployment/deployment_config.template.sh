@@ -8,8 +8,7 @@ ESP_SINGLE_SRC="$PROJECT_ROOT/ESP_single_measurement"
 ESP_INTERVAL_SRC="$PROJECT_ROOT/ESP_interval"
 DEPLOY_SRC="$PROJECT_ROOT/deployment"
 
-# deployment destinations
-FLASK_DEST="/path/to/flask/destination"
+# deployment destination
 WEBSITE_DEST="/path/to/website/destination"
 
 # Other configurations
