@@ -34,6 +34,9 @@ UNZIPPED_DIR=$(find /tmp/iotproject -mindepth 1 -maxdepth 1 -type d)
 echo "Deploying the entire project..."
 rsync -av "$UNZIPPED_DIR/" "$PROJECT_ROOT"
 
+# Exclude permission change checking 
+git config core.fileMode false
+
 # Ensure the Deployment folder is executable
 echo "Setting execute permissions on the Deployment folder..."
 chmod +x "$PROJECT_ROOT/Deployment"/*.sh

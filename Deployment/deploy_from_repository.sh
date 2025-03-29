@@ -18,6 +18,9 @@ git clone https://github.com/mckwk/IoT_project.git /tmp/iotproject
 echo "Deploying the entire project..."
 rsync -av /tmp/iotproject/ "$PROJECT_ROOT"
 
+# Exclude permission change checking 
+git config core.fileMode false
+
 # Ensure the Deployment folder is executable
 echo "Setting execute permissions on the Deployment folder..."
 chmod +x "$PROJECT_ROOT/Deployment"/*.sh
