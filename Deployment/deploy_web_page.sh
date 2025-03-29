@@ -9,7 +9,7 @@ if [ ! -d "$WEBSITE_DEST" ]; then
     sudo mkdir -p "$WEBSITE_DEST"
 fi
 
-# Copy the contents of the Website folder to the destination directory
+# Copy the contents of the website folder to the destination directory
 echo "Copying website files to $WEBSITE_DEST..."
 sudo rsync -av --exclude="$EXCLUDE_FILES" "$WEBSITE_SRC/" "$WEBSITE_DEST/"
 

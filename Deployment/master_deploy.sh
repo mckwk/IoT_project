@@ -16,7 +16,12 @@ run_flask_server() {
     cd "$FLASK_SRC" || { echo "❌ Failed to navigate to Flask directory"; exit 1; }
     mkdir -p "$PROJECT_ROOT/Logs"
     nohup python3 Flask_server.py > "$PROJECT_ROOT/Logs/flask_server_debug.log" 2>&1 &
-    FLASK_PID=$!
+    sleep 2  # Allow the process to start
+    FLASK_PID=$(ps aux | grep "[p]ython3 Flask_server.py" | awk '{print $2}')
+    if [ -z "$FLASK_PID" ]; then
+        echo "❌ Failed to start Flask server!"
+        exit 1
+    fi
     echo "✅ Flask server running in the background with PID $FLASK_PID"
     echo "Logs are available at $PROJECT_ROOT/Logs/flask_server_debug.log"
     echo "----------------------------------------"
@@ -45,7 +50,8 @@ deploy_esp_code() {
     if [ "$esp_choice" == "1" ]; then
         echo "🔧 Deploying Single Measurement code..."
         nohup ./deploy_esp_single_mes.sh > "$PROJECT_ROOT/Logs/esp_single_debug.log" 2>&1 &
-        ESP_PID=$!
+        sleep 2  # Allow the process to start
+        ESP_PID=$(ps aux | grep "[d]eploy_esp_single_mes.sh" | awk '{print $2}')
     elif [ "$esp_choice" == "2" ]; then
         read -p "Enter the interval in minutes: " interval
         if [[ ! "$interval" =~ ^[0-9]+$ ]]; then
@@ -54,27 +60,25 @@ deploy_esp_code() {
         fi
         echo "🔧 Deploying Interval Measurement code with interval: $interval minute(s)..."
         nohup ./deploy_esp_interval.sh "$interval" > "$PROJECT_ROOT/Logs/esp_interval_debug.log" 2>&1 &
-        ESP_PID=$!
+        sleep 2  # Allow the process to start
+        ESP_PID=$(ps aux | grep "[d]eploy_esp_interval.sh" | awk '{print $2}')
     else
         echo "❌ Invalid choice. Exiting."
         exit 1
     fi
 
-    echo "⏳ Waiting for the ESP code upload to finish..."
-    wait $ESP_PID  # Wait for the upload process to complete
-
-    if [ $? -eq 0 ]; then
-        echo "✅ ESP code upload completed successfully!"
-    else
-        echo "❌ ESP code upload failed!"
+    if [ -z "$ESP_PID" ]; then
+        echo "❌ Failed to start ESP code deployment!"
         exit 1
     fi
 
+    echo "✅ ESP code deployment running in the background with PID $ESP_PID"
+    echo "Logs are available at $PROJECT_ROOT/Logs/esp_single_debug.log or esp_interval_debug.log"
     echo "----------------------------------------"
 }
 
 # Main script execution
-print_banner "🚀 Starting Deployment Process"
+print_banner "🚀 Starting deployment Process"
 
 # Step 1: Run Flask server
 run_flask_server
@@ -87,7 +91,7 @@ deploy_webpage
 deploy_esp_code
 
 # Inform the user about the Flask server and ESP code
-print_banner "✅ Deployment Completed Successfully"
+print_banner "✅ deployment Completed Successfully"
 echo "ℹ️ Flask server is running in the background (PID: $FLASK_PID)"
 echo "ℹ️ ESP code is running in the background (PID: $ESP_PID)"
 echo "ℹ️ You can access the webpage at: http://localhost:5000"

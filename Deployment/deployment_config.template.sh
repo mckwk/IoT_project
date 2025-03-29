@@ -3,12 +3,12 @@
 # Define common paths
 PROJECT_ROOT="/path/to/project"
 FLASK_SRC="$PROJECT_ROOT/Flask"
-WEBSITE_SRC="$PROJECT_ROOT/Website"
+WEBSITE_SRC="$PROJECT_ROOT/website"
 ESP_SINGLE_SRC="$PROJECT_ROOT/ESP_single_measurement"
 ESP_INTERVAL_SRC="$PROJECT_ROOT/ESP_interval"
-DEPLOY_SRC="$PROJECT_ROOT/Deployment"
+DEPLOY_SRC="$PROJECT_ROOT/deployment"
 
-# Deployment destinations
+# deployment destinations
 FLASK_DEST="/path/to/flask/destination"
 WEBSITE_DEST="/path/to/website/destination"
 

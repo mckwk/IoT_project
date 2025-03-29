@@ -21,11 +21,11 @@ rsync -av /tmp/iotproject/ "$PROJECT_ROOT"
 # Exclude permission change checking 
 git config core.fileMode false
 
-# Ensure the Deployment folder is executable
-echo "Setting execute permissions on the Deployment folder..."
-chmod +x "$PROJECT_ROOT/Deployment"/*.sh
+# Ensure the deployment folder is executable
+echo "Setting execute permissions on the deployment folder..."
+chmod +x "$PROJECT_ROOT/deployment"/*.sh
 
 # Clean up
 rm -rf /tmp/iotproject
 
-echo "Deployment completed successfully."
+echo "deployment completed successfully."

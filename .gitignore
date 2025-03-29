@@ -1,9 +1,9 @@
 Logs
 
 # Ignore the config file
-Flask/config.py
-Website/db.php
-Deployment/deployment_config.sh
+flask/config.py
+website/db.php
+deployment/deployment_config.sh
 
 # Ignore everything in ESP_interval except the src folder
 ESP_interval/*
@@ -16,3 +16,8 @@ ESP_single_measurement/*
 !ESP_single_measurement/src/
 !ESP_single_measurement/src/**
 ESP_single_measurement/src/config.h
+
+# Ignore everything in ESP_blank_firmware except the src folder
+ESP_blank_firmware/*
+!ESP_blank_firmware/src/
+!ESP_blank_firmware/src/**
