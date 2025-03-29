@@ -11,11 +11,79 @@ This project consists of an IoT system that collects temperature and humidity da
 - `DB`: Contains database user configuration.
 - `Deployment`: Contains scripts to automate the deployment process for the project.
 
+## Using Template Configuration Files
+
+To avoid confusion when cloning the repository, sensitive configuration files have been renamed to templates. You need to create actual configuration files from these templates before running the project. Follow these steps:
+
+### Flask Configuration
+
+1. Navigate to the `Flask` directory:
+    ```sh
+    cd Flask
+    ```
+
+2. Copy the `config.template.py` file to `config.py`:
+    ```sh
+    cp config.template.py config.py
+    ```
+
+3. Open `config.py` and update the `DATABASE_URL` with your PostgreSQL connection string.
+
+### Website Configuration
+
+1. Navigate to the `Website` directory:
+    ```sh
+    cd Website
+    ```
+
+2. Copy the `db.template.php` file to `db.php`:
+    ```sh
+    cp db.template.php db.php
+    ```
+
+3. Open `db.php` and update the database connection details (`host`, `port`, `dbname`, `user`, `password`) with your PostgreSQL credentials.
+
+### ESP8266/ESP32 Configuration
+
+1. For the `ESP_single_measurement` project:
+    - Navigate to the `ESP_single_measurement/src` directory:
+        ```sh
+        cd ESP_single_measurement/src
+        ```
+    - Copy the `config.template.h` file to `config.h`:
+        ```sh
+        cp config.template.h config.h
+        ```
+    - Open `config.h` and update the `ssid`, `password`, and `serverUrl` with your WiFi credentials and Flask server URL.
+
+2. For the `ESP_interval` project:
+    - Navigate to the `ESP_interval/src` directory:
+        ```sh
+        cd ESP_interval/src
+        ```
+    - Copy the `config.template.h` file to `config.h`:
+        ```sh
+        cp config.template.h config.h
+        ```
+    - Open `config.h` and update the `ssid`, `password`, and `serverUrl` with your WiFi credentials and Flask server URL.
+
+### Deployment Configuration
+
+1. Navigate to the `Deployment` directory:
+    ```sh
+    cd Deployment
+    ```
+
+2. Copy the `deployment_config.template.sh` file to `deployment_config.sh`:
+    ```sh
+    cp deployment_config.template.sh deployment_config.sh
+    ```
+
+3. Open `deployment_config.sh` and update the paths (`PROJECT_ROOT`, `FLASK_DEST`, `WEBSITE_DEST`, etc.) to match your deployment environment.
 
 ## Deployment Instructions on RPI
 
 The `Deployment` folder contains scripts to automate the deployment process for the project. Below are the instructions for using these scripts:
-
 
 ### Scripts for pulling data from the repository to the RPI
 

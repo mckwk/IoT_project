@@ -76,7 +76,7 @@ def register():
         conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({"message": "Utilisateur inscrit avec succès !"}), 201
+        return jsonify({"message": "User registered successfully!"}), 201
     except Exception as e:
         print("Database error:", e)
         return jsonify({"error": "Database error"}), 500
@@ -94,7 +94,7 @@ def login():
         user = cursor.fetchone()
 
         if user and bcrypt.check_password_hash(user[0], password):
-            return jsonify({"message": "Connexion success !"}), 200
+            return jsonify({"message": "Login successful!"}), 200
         else:
             return jsonify({"error": "Email or password incorrect"}), 401
     except Exception as e:
