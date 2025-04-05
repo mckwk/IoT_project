@@ -1,8 +1,7 @@
 /* === GLOBAL === */
 body {
-    background: linear-gradient(-45deg, #e0eafc, #cfdef3, #e0c3fc, #8ec5fc);
+    background-color: aliceblue;
     background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
@@ -10,6 +9,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.logo {
+    max-width: 100%;
+    margin-bottom: 10px;
 }
 
 /* === CARD === */
@@ -142,12 +146,6 @@ a:hover {
 }
 
 /* === ANIMATIONS === */
-@keyframes gradientBG {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
-}
-
 @keyframes popUp {
     0% { opacity: 0; transform: translateY(30px);}
     100% { opacity: 1; transform: translateY(0);}

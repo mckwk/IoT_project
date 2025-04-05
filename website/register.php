@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-4">
+            <img src="logo.png" class="logo" alt="logo">
             <div class="card">
                 <div class="card-header text-center">Register</div>
                 <div class="card-body">
