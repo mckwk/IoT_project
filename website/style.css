@@ -1,0 +1,154 @@
+/* === GLOBAL === */
+body {
+    background: linear-gradient(-45deg, #e0eafc, #cfdef3, #e0c3fc, #8ec5fc);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* === CARD === */
+.card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    animation: popUp 0.7s ease-out;
+    transition: transform 0.3s ease;
+    padding: 2rem;
+    font-size: 1.1rem;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+.card-header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.75rem;
+    background: transparent;
+    border: none;
+    padding-top: 1rem;
+}
+
+/* === BUTTONS === */
+.btn-primary {
+    background: linear-gradient(to right, #0061ff, #60efff);
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 97, 255, 0.3);
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 97, 255, 0.5);
+}
+
+.btn-success {
+    background-color: #00b894;
+    border: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem;
+}
+
+.btn-success:hover {
+    background-color: #00a383;
+}
+
+/* === FORMS === */
+.form-control {
+    height: 52px;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* === LINK === */
+a {
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* === ERROR === */
+.is-invalid {
+    border: 2px solid #e74c3c;
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+    transition: all 0.2s ease;
+}
+
+.error-text {
+    color: #e74c3c;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    padding-left: 4px;
+    transition: all 0.3s ease;
+}
+
+/* === LINK (animated) === */
+.fancy-link {
+    display: inline-block;
+    position: relative;
+    color: #007bff;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.fancy-link::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(to right, #0061ff, #60efff);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+
+.fancy-link:hover {
+    color: #0056b3;
+}
+
+.fancy-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* === ANIMATIONS === */
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+@keyframes popUp {
+    0% { opacity: 0; transform: translateY(30px);}
+    100% { opacity: 1; transform: translateY(0);}
+}
