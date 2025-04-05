@@ -1,30 +1,28 @@
 <?php
 include 'db.php';
-session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['password'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->execute(['email' => $email]);
-    $user = $stmt->fetch();
-
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
-        header("Location: dashboard.php");
-        exit();
-    } else {
-        $error = "Invalid login credentials.";
+    try {
+        $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
+        $stmt->execute(['email' => $email, 'password' => $password]);
+    } catch (PDOException $e) {
+        echo 'Error';
     }
+
+    header("Location: index.php");
+    exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -33,9 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header text-center">Login</div>
+                <div class="card-header text-center">Register</div>
                 <div class="card-body">
-                    <?php if (isset($error)) echo "<div class='alert alert-danger'>$error</div>"; ?>
                     <form method="POST" novalidate>
                         <div class="mb-3">
                             <label class="form-label">Email</label>
@@ -46,12 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label class="form-label">Password</label>
                             <input type="password" name="password" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
                     </form>
                 </div>
             </div>
             <p class="mt-3 text-center">
-                <a href="register.php" class="fancy-link">Don't have an account? <strong>Register</strong></a>
+                <a href="index.php" class="fancy-link">Already have an account? <strong>Login</strong></a>
             </p>
         </div>
     </div>
