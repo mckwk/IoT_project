@@ -7,7 +7,7 @@ This project consists of an IoT system that collects temperature and humidity da
 - `ESP_interval`: Contains the code for the ESP8266 microcontroller to read sensor data at a configurable interval and send it to the server.
 - `ESP_single_measurement`: Contains the code for the ESP32 microcontroller to read sensor data once and send it to the server.
 - `ESP_blank_firmware`: Contains a blank firmware to stop the ESP device from sending data.
-- `website`: Contains the PHP files for the web dashboard and user authentication.
+- `website`: Contains the PHP and CSS files for the web dashboard and user authentication.
 - `flask`: Contains the flask server code to handle data storage and user management.
 - `DB`: Contains database user configuration.
 - `deployment`: Contains scripts to automate the deployment process for the project.
