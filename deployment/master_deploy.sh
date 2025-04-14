@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Activate the virtual environment
+source ../.venv/bin/activate
+
 # Load configuration
 source "./deployment_config.sh"
 
@@ -93,6 +96,9 @@ deploy_esp_code
 # Inform the user about the Flask server and ESP code
 print_banner "✅ deployment Completed Successfully"
 echo "ℹ️ Flask server is running in the background (PID: $FLASK_PID)"
-echo "ℹ️ ESP code is running in the background (PID: $ESP_PID)"
+echo "you can kill the process using the following commands:"
+echo "kill $FLASK_PID"
+echo "ℹ️ ESP code is deploying in the background - check logs for details"
+echo "----------------------------------------"
 echo "ℹ️ You can access the webpage at: http://localhost:5000"
 echo "========================================"

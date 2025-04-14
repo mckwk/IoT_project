@@ -27,7 +27,11 @@ $data = $stmt->fetch();
 <div class="container mt-5">
     <h2 class="text-center">Latest Temperature Reading</h2>
     <?php if ($data): ?>
-        <?php $formatted_timestamp = date("d.m.Y H:i:s", strtotime($data['timestamp'])); ?>
+        <?php
+        $datetime = new DateTime($data['timestamp'], new DateTimeZone('UTC'));
+        $datetime->setTimezone(new DateTimeZone('Europe/Warsaw')); 
+        $formatted_timestamp = $datetime->format("d.m.Y H:i:s");
+        ?>
         <table class="table table-striped">
             <thead class="table-dark">
                 <tr>

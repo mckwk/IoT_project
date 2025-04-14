@@ -28,7 +28,14 @@ To avoid confusion when cloning the repository, sensitive configuration files ha
     cp config.template.py config.py
     ```
 
-3. Open `config.py` and update the `DATABASE_URL` with your PostgreSQL connection string.
+3. Open `config.py` and update the `DATABASE_URL` with your PostgreSQL connection string and secKey with your API key.
+
+4.   Execute the following commands:
+  ```sh
+    cp privkey.template.pem privkey.pem
+    cp cert.template.pem cert.pem
+    ```
+    and insert your credentials into the files.
 
 ### website Configuration
 
@@ -55,7 +62,7 @@ To avoid confusion when cloning the repository, sensitive configuration files ha
         ```sh
         cp config.template.h config.h
         ```
-    - Open `config.h` and update the `ssid`, `password`, and `serverUrl` with your WiFi credentials and flask server URL.
+    - Open `config.h` and update the credentials to your values.
 
 2. For the `ESP_interval` project:
     - Navigate to the `ESP_interval/src` directory:
@@ -66,7 +73,7 @@ To avoid confusion when cloning the repository, sensitive configuration files ha
         ```sh
         cp config.template.h config.h
         ```
-    - Open `config.h` and update the `ssid`, `password`, and `serverUrl` with your WiFi credentials and flask server URL.
+    - Open `config.h` and update the credentials to your values.
 
 ### deployment Configuration
 
@@ -88,12 +95,17 @@ The `deployment` folder contains scripts to automate the deployment process for 
 
 ### Scripts for pulling data from the repository to the RPI
 
-#### Deploying from the Repository
-
-To deploy the project from the latest repository contents:
-1. Run the script:
+First proceed to the deployment dir:
     ```sh
-    ./deployment/deploy_from_repository.sh
+    cd deployment
+    ```
+
+#### Deploying from the Repository
+To deploy the project from the latest repository contents:
+
+1. Run the script from the project directory:
+    ```sh
+    ./deploy_from_repository.sh
     ```
 
 #### Deploying from the Latest Release
@@ -102,7 +114,7 @@ Use that one if you broke everything and you want to return to a baseline functi
 To deploy the project from the latest GitHub release:
 1. Run the script:
     ```sh
-    ./deployment/deploy_from_latest_release.sh
+    ./deploy_from_latest_release.sh
     ```
 
 ### Scripts for deploying the project and running it directly from RPI
@@ -113,7 +125,7 @@ The `master_deploy.sh` script orchestrates the deployment of the flask server, w
 
 1. Run the script:
     ```sh
-    ./deployment/master_deploy.sh
+    ./master_deploy.sh
     ```
 
 2. Follow the on-screen prompts to:
@@ -126,7 +138,7 @@ The `master_deploy.sh` script orchestrates the deployment of the flask server, w
 To deploy the ESP interval measurement code with a custom interval:
 1. Run the script:
     ```sh
-    ./deployment/deploy_esp_interval.sh <interval_in_minutes>
+    ./deploy_esp_interval.sh <interval_in_minutes>
     ```
 2. Replace `<interval_in_minutes>` with the desired interval in minutes.
 
@@ -135,7 +147,7 @@ To deploy the ESP interval measurement code with a custom interval:
 To deploy the ESP single measurement code:
 1. Run the script:
     ```sh
-    ./deployment/deploy_esp_single_mes.sh
+    ./deploy_esp_single_mes.sh
     ```
 
 ### Deploying the website
@@ -143,7 +155,7 @@ To deploy the ESP single measurement code:
 To deploy the website files:
 1. Run the script:
     ```sh
-    ./deployment/deploy_web_page.sh
+    ./deploy_web_page.sh
     ```
 
 ### Stopping the ESP Device with Blank Firmware

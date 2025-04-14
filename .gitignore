@@ -21,3 +21,7 @@ ESP_single_measurement/src/config.h
 ESP_blank_firmware/*
 !ESP_blank_firmware/src/
 !ESP_blank_firmware/src/**
+
+# Ignore security files
+flask/privkey.pem
+flask/cert.pem

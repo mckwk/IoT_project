@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import psycopg2
 from flask_bcrypt import Bcrypt
 import re
-from config import DATABASE_URL
+from config import DATABASE_URL, secKey
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -40,6 +40,10 @@ def is_valid_humidity(humid):
 
 @app.route('/store', methods=['POST'])
 def store_data():
+    insertedSecKey = request.headers.get('X-API-KEY')
+    if insertedSecKey != secKey:
+        return jsonify({'error': 'unauthorized'}), 403
+
     data = request.get_json()
     if not data:
         return "Invalid JSON", 400
@@ -126,4 +130,4 @@ def download_data():
         return jsonify({"error": "Database error"}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8443, ssl_context=('cert.pem','privkey.pem'))
