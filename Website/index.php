@@ -1,24 +1,23 @@
 <?php
-include 'db.php';
 session_start();
+require_once 'api.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->execute(['email' => $email]);
-    $user = $stmt->fetch();
+    $response = api_post('/login', ["email" => $email, "password" => $password]);
 
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
+    if (is_array($response) && isset($response['message'])) {
+        $_SESSION['email'] = $email;
         header("Location: dashboard.php");
         exit();
     } else {
-        $error = "Invalid login credentials.";
+        $error = $response['error'] ?? "Login failed. Please try again.";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

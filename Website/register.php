@@ -1,20 +1,17 @@
 <?php
-include 'db.php';
+require_once 'api.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $password = $_POST['password'];
 
-    try{
-        $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
-        $stmt->execute(['email' => $email, 'password' => $password]);
-    }
-    catch(PDOException $e){
-        echo 'Error';
-    }
+    $response = api_post('/register', ["email" => $email, "password" => $password]);
 
-    header("Location: index.php");
-    exit();
+    if (isset($response['message'])) {
+        echo "<p>Registration successful! <a href='login.php'>Login here</a></p>";
+    } else {
+        echo "<p>Error: " . $response['error'] . "</p>";
+    }
 }
 ?>
 

@@ -1,15 +1,15 @@
 <?php
-include 'db.php';
 session_start();
+require_once 'api.php';
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['email'])) {
     header("Location: index.php");
     exit();
 }
 
-$stmt = $pdo->query("SELECT temperature, humidity, timestamp FROM data ORDER BY timestamp DESC LIMIT 1");
-$data = $stmt->fetch();
+$data = api_get('/data');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
