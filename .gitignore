@@ -1,0 +1,27 @@
+logs
+
+# Ignore the config file
+flask/config.py
+website/db.php
+deployment/deployment_config.sh
+
+# Ignore everything in ESP_interval except the src folder
+ESP_interval/*
+!ESP_interval/src/
+!ESP_interval/src/**
+ESP_interval/src/config.h
+
+# Ignore everything in ESP_single_measurement except the src folder
+ESP_single_measurement/*
+!ESP_single_measurement/src/
+!ESP_single_measurement/src/**
+ESP_single_measurement/src/config.h
+
+# Ignore everything in ESP_blank_firmware except the src folder
+ESP_blank_firmware/*
+!ESP_blank_firmware/src/
+!ESP_blank_firmware/src/**
+
+# Ignore security files
+flask/privkey.pem
+flask/cert.pem

@@ -1,16 +1,14 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <DHT.h>
+#include "config.h"
 
 // DHT Sensor Setup
 #define DHTPIN 5
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
-// WiFi Configuration
-const char* ssid = "ssid";  // Replace with your WiFi SSID
-const char* password = "pwd";         // Replace with your WiFi password
-const char* serverUrl = "http://ip:port/store";  // Raspberry Pi server
+void goToDeepSleep();
 
 void setup() {
     Serial.begin(115200);
@@ -46,19 +44,26 @@ void setup() {
 
     // Send data to server
     if (WiFi.status() == WL_CONNECTED) {
-        WiFiClient client;
+        WiFiClientSecure client;
+	//client.setTrustAnchors(new BearSSL::X509List(root_ca));
+	//client.setInsecure();
+	client.setFingerprint(SERVER_FINGERPRINT);
         HTTPClient http;
-        http.begin(client, serverUrl);
-        http.addHeader("Content-Type", "application/json");
+        if(http.begin(client, serverUrl)) {
+        	http.addHeader("Content-Type", "application/json");
+		http.addHeader("X-API-KEY", secKey);
 
-        String jsonPayload = "{\"temperature\": " + String(temperature) + 
-                             ", \"humidity\": " + String(humidity) + "}";
+        	String jsonPayload = "{\"temperature\": " + String(temperature) + 
+                	             ", \"humidity\": " + String(humidity) + "}";
 
-        int httpResponseCode = http.POST(jsonPayload);
-        Serial.print("📡 HTTP Response code: ");
-        Serial.println(httpResponseCode);
+        	int httpResponseCode = http.POST(jsonPayload);
+        	Serial.print("📡 HTTP Response code: ");
+        	Serial.println(httpResponseCode);
 
-        http.end();
+        	http.end();
+	} else {
+		Serial.println("HTTPS connection failed");
+	}    
     } else {
         Serial.println("🚨 WiFi disconnected!");
     }

@@ -1,16 +1,15 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <DHT.h>
+#include "config.h"
 
 // DHT Sensor Setup
 #define DHTPIN 5
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
-// WiFi Configuration
-const char* ssid = "ssid";  // Replace with your WiFi SSID
-const char* password = "pwd";         // Replace with your WiFi password
-const char* serverUrl = "http://rpi_ip:port/store";  // Raspberry Pi server
+// User-defined interval in minutes
+unsigned int intervalMinutes = 1; // Default interval (can be modified)
 
 void setup() {
     Serial.begin(115200);
@@ -62,6 +61,10 @@ void loop() {
         Serial.println("🚨 WiFi disconnected!");
     }
 
-    // Wait for 1 minute before next reading
-    delay(60000);
+    // Wait for the user-defined interval before the next reading
+    unsigned long intervalMillis = intervalMinutes * 60000; // Convert minutes to milliseconds
+    Serial.print("⏳ Waiting for ");
+    Serial.print(intervalMinutes);
+    Serial.println(" minute(s)...");
+    delay(intervalMillis);
 }
