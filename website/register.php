@@ -21,7 +21,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // new CSRF token generation after a successful connection
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     } catch (PDOException $e) {
-        echo 'Error';
+            if ($e->getCode() == '23505') { // Duplicate entry
+                $_SESSION['error'] = "This account already exists.";
+                header("Location: register.php");
+                exit();
+            } else {
+                $_SESSION['error'] = "Something went wrong. Please try again.";
+                header("Location: register.php");
+                exit();
+            }
+        }
     }
 
     header("Location: index.php");
@@ -49,6 +58,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="card">
                     <div class="card-header text-center">Register</div>
                     <div class="card-body">
+                        <!-- Error Alert -->
+                        <?php if (!empty($error_message)): ?>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <?= htmlspecialchars($error_message) ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php endif; ?>
                         <form method="POST">
                             <input type="hidden" name="csrf_token"
                                 value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
