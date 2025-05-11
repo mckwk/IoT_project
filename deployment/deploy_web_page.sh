@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Load configuration
+source ../.venv/bin/activate
 source "$(dirname "$0")/deployment_config.sh"
 
 # Ensure the destination directory exists

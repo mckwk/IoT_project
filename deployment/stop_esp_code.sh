@@ -2,6 +2,7 @@
 
 # Function to upload blank firmware to the ESP
 stop_esp_code() {
+    source ../.venv/bin/activate
     echo "🔄 Uploading blank firmware to stop the ESP device..."
     cd /home/rpi/IoT_project/ESP_blank_firmware || { echo "❌ Failed to navigate to blank firmware directory"; exit 1; }
     pio run --target upload
