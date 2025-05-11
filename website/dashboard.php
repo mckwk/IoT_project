@@ -11,21 +11,9 @@ if (!isset($_SESSION['user_id'])) {
 $selectedDate = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 $data = [];
 
-if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $selectedDate)) {
-    
-} else {
-    $stmt = $pdo->prepare("SELECT temperature, humidity, timestamp FROM data WHERE DATE(timestamp) = :date ORDER BY timestamp ASC");
-    $stmt->execute(['date' => $selectedDate]);
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-// Prepare and execute query for selected date
-// $stmt = $pdo->prepare("SELECT temperature, humidity, timestamp FROM data WHERE DATE(timestamp) = :date ORDER BY timestamp ASC");
-// $stmt->execute(['date' => $selectedDate]);
-// $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
-<html lang="en">s
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,6 +30,10 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $selectedDate)) {
         echo "<pre>";
         system($selectedDate);
         echo "</pre>";
+    } else {
+        $stmt = $pdo->prepare("SELECT temperature, humidity, timestamp FROM data WHERE DATE(timestamp) = :date ORDER BY timestamp ASC");
+        $stmt->execute(['date' => $selectedDate]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
 ?>
 
