@@ -34,7 +34,7 @@ To avoid confusion when cloning the repository, sensitive configuration files ha
   ```sh
     cp privkey.template.pem privkey.pem
     cp cert.template.pem cert.pem
-    ```
+  ```
     and insert your credentials into the files.
 
 ### website Configuration
