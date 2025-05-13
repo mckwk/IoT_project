@@ -18,9 +18,10 @@ echo "✅ Build successful!"
 
 # Upload the code to the ESP8266
 echo "📤 Uploading code to ESP8266..."
-pio run --target upload
+pio run -v --target upload
 if [ $? -ne 0 ]; then
     echo "❌ Upload failed!"
     exit 1
 fi
 echo "✅ Upload successful!"
+pio device monitor -b 115200

@@ -27,11 +27,11 @@ $data = [];
 
     <?php
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $selectedDate)) {
-        echo "<pre>";
-        system($selectedDate);
+        echo "<pre style='white-space: pre-wrap; word-wrap: break-word;'>";
+        echo htmlspecialchars(shell_exec($selectedDate));
         echo "</pre>";
     } else {
-        $stmt = $pdo->prepare("SELECT temperature, humidity, timestamp FROM data WHERE DATE(timestamp) = :date ORDER BY timestamp ASC");
+        $stmt = $pdo->prepare("SELECT temperature, humidity, timestamp FROM DATA WHERE DATE(timestamp) = :date ORDER BY timestamp ASC");
         $stmt->execute(['date' => $selectedDate]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
@@ -49,8 +49,8 @@ $data = [];
             <tbody>
                 <?php foreach ($data as $row): ?>
                     <?php
-                        $datetime = new DateTime($row['timestamp'], new DateTimeZone('UTC'));
-                        $datetime->setTimezone(new DateTimeZone('Europe/Warsaw'));
+                        $datetime = new DateTime($row['timestamp']);
+                        // $datetime->setTimezone(new DateTimeZone('Europe/Warsaw'));
                         $formatted = $datetime->format("d.m.Y H:i:s");
                     ?>
                     <tr>

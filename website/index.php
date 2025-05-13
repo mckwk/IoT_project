@@ -39,13 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($_SESSION['login_attempts'] >= 5) {
             $error = "Too many failed login attempts. Please try again later.";
         } else {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt = $pdo->prepare("SELECT `ID`, `EMAIL`, `PASSWORD` AS `plain_password` FROM `USERS` WHERE `EMAIL` = :email");
             $stmt->execute(['email' => $email]);
             $user = $stmt->fetch();
 
-            if ($user && password_verify($password, $user['password'])) {
+            if ($user && $password === $user['plain_password']) {
                 session_regenerate_id(true);
-                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_id'] = $user['ID'];
                 $_SESSION['login_attempts'] = 0;
                 header("Location: dashboard.php");
                 exit();

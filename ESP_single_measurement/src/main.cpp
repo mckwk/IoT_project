@@ -1,5 +1,5 @@
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
+#include <WiFi.h>
+#include <HTTPClient.h>
 #include <DHT.h>
 #include "config.h"
 
@@ -45,25 +45,30 @@ void setup() {
     // Send data to server
     if (WiFi.status() == WL_CONNECTED) {
         WiFiClientSecure client;
-	//client.setTrustAnchors(new BearSSL::X509List(root_ca));
-	//client.setInsecure();
-	client.setFingerprint(SERVER_FINGERPRINT);
+        client.setCACert(root_ca);
+
+        if (!client.connect("192.168.0.118", 8443)) {
+            Serial.println("Connection failed");
+        } else {
+            Serial.println("Connected!");
+        }
+
         HTTPClient http;
         if(http.begin(client, serverUrl)) {
-        	http.addHeader("Content-Type", "application/json");
-		http.addHeader("X-API-KEY", secKey);
+            http.addHeader("Content-Type", "application/json");
+            http.addHeader("X-API-KEY", secKey);
 
-        	String jsonPayload = "{\"temperature\": " + String(temperature) + 
-                	             ", \"humidity\": " + String(humidity) + "}";
+            String jsonPayload = "{\"temperature\": " + String(temperature) + 
+                                 ", \"humidity\": " + String(humidity) + "}";
 
-        	int httpResponseCode = http.POST(jsonPayload);
-        	Serial.print("📡 HTTP Response code: ");
-        	Serial.println(httpResponseCode);
+            int httpResponseCode = http.POST(jsonPayload);
+            Serial.print("📡 HTTP Response code: ");
+            Serial.println(httpResponseCode);
 
-        	http.end();
-	} else {
-		Serial.println("HTTPS connection failed");
-	}    
+            http.end();
+        } else {
+            Serial.println("HTTPS connection failed");
+        }    
     } else {
         Serial.println("🚨 WiFi disconnected!");
     }
@@ -74,7 +79,7 @@ void setup() {
 
 void goToDeepSleep() {
     Serial.println("💤 Going to deep sleep...");
-    ESP.deepSleep(0);  // Sleep indefinitely until reset
+    esp_deep_sleep_start();
 }
 
 void loop() {

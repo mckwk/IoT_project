@@ -1,5 +1,5 @@
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
+#include <WiFi.h>
+#include <HTTPClient.h>
 #include <DHT.h>
 #include "config.h"
 
@@ -46,9 +46,14 @@ void loop() {
     // Send data to server
     if (WiFi.status() == WL_CONNECTED) {
         WiFiClientSecure client;
-	//client.setTrustAnchors(new BearSSL::X509List(root_ca));
-	//client.setInsecure();
-	client.setFingerprint(SERVER_FINGERPRINT);
+        client.setCACert(root_ca);
+
+        if (!client.connect("192.168.0.118", 8443)) {
+            Serial.println("Connection failed");
+        } else {
+            Serial.println("Connected!");
+        }
+
         HTTPClient http;
         if(http.begin(client, serverUrl)) {
         	http.addHeader("Content-Type", "application/json");

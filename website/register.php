@@ -13,30 +13,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Invalid CSRF token.");
     }
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $password = $_POST['password'];
 
     try {
-        $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
+        $stmt = $pdo->prepare("INSERT INTO USERS (email, password) VALUES (:email, :password)");
         $stmt->execute(['email' => $email, 'password' => $password]);
         // new CSRF token generation after a successful connection
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        header("Location: index.php");
+        exit();  
     } catch (PDOException $e) {
             if ($e->getCode() == '23505') { // Duplicate entry
                 $_SESSION['error'] = "This account already exists.";
-                header("Location: register.php");
-                exit();
             } else {
                 $_SESSION['error'] = "Something went wrong. Please try again.";
-                header("Location: register.php");
-                exit();
             }
+            header("Location: register.php");
+            exit();
         }
     }
 
-    header("Location: index.php");
-
-    exit();
-}
+    // header("Location: index.php");
+    // exit();    
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" name="email" class="form-control" required>
+                                <input type="email" name="email" id="email" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Password</label>

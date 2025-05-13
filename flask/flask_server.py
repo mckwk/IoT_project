@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
-import psycopg2
+import mysql.connector
 from flask_bcrypt import Bcrypt
 import re
-from config import DATABASE_URL, secKey
+from config import DATABASE_CONFIG, secKey
+import time
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -13,9 +14,9 @@ def is_valid_email(email):
 
 def insert_data(temp, humid):
     try:
-        conn = psycopg2.connect(DATABASE_URL)
+        conn = mysql.connector.connect(**DATABASE_CONFIG)
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO data (temperature, humidity) VALUES (%s, %s)", (temp, humid))
+        cursor.execute("INSERT INTO DATA (temperature, humidity) VALUES (%s, %s)", (temp, humid))
         conn.commit()
         cursor.close()
         conn.close()
@@ -74,9 +75,9 @@ def register():
     hashed_pw = bcrypt.generate_password_hash(password).decode('utf-8')
 
     try:
-        conn = psycopg2.connect(DATABASE_URL)
+        conn = mysql.connector.connect(**DATABASE_CONFIG)
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, hashed_pw))
+        cursor.execute("INSERT INTO USERS (email, password) VALUES (%s, %s)", (email, hashed_pw))
         conn.commit()
         cursor.close()
         conn.close()
@@ -92,9 +93,9 @@ def login():
     password = data['password']
 
     try:
-        conn = psycopg2.connect(DATABASE_URL)
+        conn = mysql.connector.connect(**DATABASE_CONFIG)
         cursor = conn.cursor()
-        cursor.execute("SELECT password FROM users WHERE email = %s", (email,))
+        cursor.execute("SELECT password FROM USERS WHERE email = %s", (email,))
         user = cursor.fetchone()
 
         if user and bcrypt.check_password_hash(user[0], password):
@@ -109,9 +110,9 @@ def login():
 @app.route('/data', methods=['GET'])
 def download_data():
     try:
-        conn = psycopg2.connect(DATABASE_URL)
+        conn = mysql.connector.connect(**DATABASE_CONFIG)
         cursor = conn.cursor()
-        cursor.execute("SELECT temperature, humidity, timestamp FROM data ORDER BY timestamp DESC")
+        cursor.execute("SELECT temperature, humidity, timestamp FROM DATA ORDER BY timestamp DESC")
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -128,6 +129,11 @@ def download_data():
     except Exception as e:
         print("Database error:", e)
         return jsonify({"error": "Database error"}), 500
+
+@app.route('/time')
+def get_time():
+    return jsonify({"epoch": int(time.time())})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8443, ssl_context=('cert.pem','privkey.pem'))
