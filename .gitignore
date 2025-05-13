@@ -25,3 +25,6 @@ ESP_blank_firmware/*
 # Ignore security files
 flask/privkey.pem
 flask/cert.pem
+
+# Ignore env
+.venv
