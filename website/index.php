@@ -39,11 +39,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($_SESSION['login_attempts'] >= 5) {
             $error = "Too many failed login attempts. Please try again later.";
         } else {
-            $stmt = $pdo->prepare("SELECT `ID`, `EMAIL`, `PASSWORD` AS `plain_password` FROM `USERS` WHERE `EMAIL` = :email");
+            $stmt = $pdo->prepare("SELECT `ID`, `EMAIL`, `PASSWORD` FROM `USERS` WHERE `EMAIL` = :email");
             $stmt->execute(['email' => $email]);
             $user = $stmt->fetch();
 
-            if ($user && $password === $user['plain_password']) {
+            if ($user && password_verify($password, $user['PASSWORD'])) {
                 session_regenerate_id(true);
                 $_SESSION['user_id'] = $user['ID'];
                 $_SESSION['login_attempts'] = 0;

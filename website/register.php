@@ -2,6 +2,12 @@
 session_start();
 include 'db.php';
 
+$error_message = '';
+if (isset($_SESSION['error'])) {
+    $error_message = $_SESSION['error'];
+    unset($_SESSION['error']);
+}
+
 if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -14,16 +20,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     try {
         $stmt = $pdo->prepare("INSERT INTO USERS (email, password) VALUES (:email, :password)");
-        $stmt->execute(['email' => $email, 'password' => $password]);
+        $stmt->execute(['email' => $email, 'password' => $hashedPassword]);
         // new CSRF token generation after a successful connection
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         header("Location: index.php");
         exit();  
     } catch (PDOException $e) {
-            if ($e->getCode() == '23505') { // Duplicate entry
+            if ($e->getCode() == '23000') { // Duplicate entry
                 $_SESSION['error'] = "This account already exists.";
             } else {
                 $_SESSION['error'] = "Something went wrong. Please try again.";
@@ -31,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: register.php");
             exit();
         }
-    }  
+    }
 ?>
 
 <!DOCTYPE html>
