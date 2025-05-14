@@ -7,7 +7,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Get selected date or use today
 $selectedDate = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 $data = [];
 
@@ -50,7 +49,6 @@ $data = [];
                 <?php foreach ($data as $row): ?>
                     <?php
                         $datetime = new DateTime($row['timestamp']);
-                        // $datetime->setTimezone(new DateTimeZone('Europe/Warsaw'));
                         $formatted = $datetime->format("d.m.Y H:i:s");
                     ?>
                     <tr>

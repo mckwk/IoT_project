@@ -3,13 +3,11 @@
 #include <DHT.h>
 #include "config.h"
 
-// DHT Sensor Setup
 #define DHTPIN 5
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
-// User-defined interval in minutes
-unsigned int intervalMinutes = 1; // Default interval (can be modified)
+unsigned int intervalMinutes = 1;
 
 void setup() {
     Serial.begin(115200);
@@ -31,7 +29,6 @@ void setup() {
 }
 
 void loop() {
-    // Read temperature and humidity
     float temperature = dht.readTemperature();
     float humidity = dht.readHumidity();
 
@@ -43,7 +40,6 @@ void loop() {
     Serial.print("🌡 Temperature: "); Serial.print(temperature); Serial.println(" °C");
     Serial.print("💧 Humidity: "); Serial.print(humidity); Serial.println(" %");
 
-    // Send data to server
     if (WiFi.status() == WL_CONNECTED) {
         WiFiClientSecure client;
         client.setCACert(root_ca);
@@ -74,8 +70,7 @@ void loop() {
         Serial.println("🚨 WiFi disconnected!");
     }
 
-    // Wait for the user-defined interval before the next reading
-    unsigned long intervalMillis = intervalMinutes * 60000; // Convert minutes to milliseconds
+    unsigned long intervalMillis = intervalMinutes * 60000;
     Serial.print("⏳ Waiting for ");
     Serial.print(intervalMinutes);
     Serial.println(" minute(s)...");

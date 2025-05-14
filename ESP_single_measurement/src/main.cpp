@@ -3,7 +3,6 @@
 #include <DHT.h>
 #include "config.h"
 
-// DHT Sensor Setup
 #define DHTPIN 5
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
@@ -27,9 +26,8 @@ void setup() {
     Serial.println(WiFi.localIP());
 
     dht.begin();
-    delay(2000);  // Give sensor time to start
+    delay(2000);
 
-    // Read temperature and humidity
     float temperature = dht.readTemperature();
     float humidity = dht.readHumidity();
 
@@ -42,7 +40,6 @@ void setup() {
     Serial.print("🌡 Temperature: "); Serial.print(temperature); Serial.println(" °C");
     Serial.print("💧 Humidity: "); Serial.print(humidity); Serial.println(" %");
 
-    // Send data to server
     if (WiFi.status() == WL_CONNECTED) {
         WiFiClientSecure client;
         client.setCACert(root_ca);
@@ -73,7 +70,6 @@ void setup() {
         Serial.println("🚨 WiFi disconnected!");
     }
 
-    // Go to deep sleep to save power
     goToDeepSleep();
 }
 
@@ -83,5 +79,4 @@ void goToDeepSleep() {
 }
 
 void loop() {
-    // Empty loop - never runs due to deep sleep
 }

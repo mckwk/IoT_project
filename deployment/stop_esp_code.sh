@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Function to upload blank firmware to the ESP
 stop_esp_code() {
     source ../.venv/bin/activate
     echo "🔄 Uploading blank firmware to stop the ESP device..."
@@ -13,5 +12,4 @@ stop_esp_code() {
     fi
 }
 
-# Execute the function
 stop_esp_code

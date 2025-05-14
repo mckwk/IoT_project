@@ -14,7 +14,6 @@ if (!isset($_SESSION['csrf_token'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // CSRF token check
     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         die("Invalid CSRF token.");
     }
@@ -25,12 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $stmt = $pdo->prepare("INSERT INTO USERS (email, password) VALUES (:email, :password)");
         $stmt->execute(['email' => $email, 'password' => $hashedPassword]);
-        // new CSRF token generation after a successful connection
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         header("Location: index.php");
         exit();  
     } catch (PDOException $e) {
-            if ($e->getCode() == '23000') { // Duplicate entry
+            if ($e->getCode() == '23000') {
                 $_SESSION['error'] = "This account already exists.";
             } else {
                 $_SESSION['error'] = "Something went wrong. Please try again.";
@@ -60,7 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="card">
                     <div class="card-header text-center">Register</div>
                     <div class="card-body">
-                        <!-- Error Alert -->
                         <?php if (!empty($error_message)): ?>
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <?= htmlspecialchars($error_message) ?>
