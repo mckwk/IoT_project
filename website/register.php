@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'db.php';
 
 $error_message = '';
@@ -43,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: index.php");
         exit();  
     } catch (PDOException $e) {
-            if ($e->getCode() == '23000') {
+            if ($e->getCode() == '23000') { // Duplicate entry
                 $_SESSION['error'] = "This account already exists.";
             } else {
                 $_SESSION['error'] = "Something went wrong. Please try again.";
@@ -73,6 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="card">
                     <div class="card-header text-center">Register</div>
                     <div class="card-body">
+                        <!-- Error Alert -->
                         <?php if (!empty($error_message)): ?>
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <?= htmlspecialchars($error_message) ?>

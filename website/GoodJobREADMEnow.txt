@@ -3,3 +3,7 @@ Now, on the server you have to find 2 sepearately placed flags in the format PUT
 Depends on your expertise, both flags can vary in the difficulty.
 For the first flag (on the WEB-SERVER!!!) you have to us3 lost cr3ds to c0nnect. 6omewhere. 
 Ahh, apologies... we dont see any text in our notebook regarding 2nd flag.
+
+YOU ARE NOT ALLOWED TO MODIFY/DELETE DATA ON THE SYSTEM. 
+DESTRUCTIVE COMMANDS/ACTIVITY ARE FORBIDDEN. 
+LET OTHERS TAKE PART IN THIS CHALLENGE TOO...
