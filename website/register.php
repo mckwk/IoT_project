@@ -14,16 +14,31 @@ if (!isset($_SESSION['csrf_token'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    // CSRF token check
     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         die("Invalid CSRF token.");
     }
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
+
+    // Password validation (server-side)
+    if (
+        strlen($password) < 8 ||
+        !preg_match('/[a-z]/', $password) ||
+        !preg_match('/[A-Z]/', $password) ||
+        !preg_match('/[\W_]/', $password)
+    ) {
+        $_SESSION['error'] = "Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, and one special character.";
+        header("Location: register.php");
+        exit();
+    }
+
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     try {
         $stmt = $pdo->prepare("INSERT INTO USERS (email, password) VALUES (:email, :password)");
         $stmt->execute(['email' => $email, 'password' => $hashedPassword]);
+        // new CSRF token generation after a successful connection
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         header("Location: index.php");
         exit();  
